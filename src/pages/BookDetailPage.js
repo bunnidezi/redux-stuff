@@ -5,52 +5,33 @@ import { toast } from "react-toastify";
 import api from "../apiService";
 import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addBookById, getBookById } from "../features/bookId/bookIdSlice";
+import { addFavorite, getSingleBook } from "../features/books/bookSlice";
+
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const BookDetailPage = () => {
-  const [loading, setLoading] = useState(false);
-  // const [book, setBook] = useState(null);
   const [addingBook, setAddingBook] = useState(false);
   const params = useParams();
-  const bookId = params.id;
+  const bookId = params.id
+  const dispatch = useDispatch()
+
+  const { book, loading, errorMessage } = useSelector(state => state.books)
 
   const addToReadingList = (book) => {
     setAddingBook(book);
   };
 
-  const dispatch = useDispatch();
-  const book = useSelector((state) => state.book.book);
 
+  if (errorMessage) toast.error(errorMessage);
   useEffect(() => {
-    const postData = async () => {
-      if (!addingBook) return;
-      setLoading(true);
-      try {
-        await api.post(`/favorites`, addingBook);
-        toast.success("The book has been added to the reading list!");
-      } catch (error) {
-        toast.error(error.message);
-      }
-      setLoading(false);
-    };
-    postData();
+    if (addingBook) {
+      dispatch(addFavorite({ addingBook }))
+    }
   }, [addingBook]);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   setLoading(true);
-    //   try {
-    //     const res = await api.get(`/books/${bookId}`);
-    //     setBook(res.data);
-    //   } catch (error) {
-    //     toast.error(error.message);
-    //   }
-    //   setLoading(false);
-    // };
-    // fetchData();
-    dispatch(getBookById({ bookId }));
+    dispatch(getSingleBook({ bookId }))
   }, [bookId]);
 
   return (
@@ -68,7 +49,7 @@ const BookDetailPage = () => {
           sx={{ border: "1px solid black" }}
         >
           <Grid item md={4}>
-            {book && (
+            {Object.keys(book).length && (
               <img
                 width="100%"
                 src={`${BACKEND_API}/${book.imageLink}`}
@@ -77,7 +58,7 @@ const BookDetailPage = () => {
             )}
           </Grid>
           <Grid item md={8}>
-            {book && (
+            {Object.keys(book).length && (
               <Stack>
                 <h2>{book.title}</h2>
                 <Typography variant="body1">

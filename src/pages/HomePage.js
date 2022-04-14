@@ -23,39 +23,21 @@ import { getBooks } from "../features/books/bookSlice";
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const HomePage = () => {
-  // const [books, setBooks] = useState([]);
   const [pageNum, setPageNum] = useState(1);
   const totalPage = 10;
   const limit = 10;
-
-  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const handleClickBook = (bookId) => {
     navigate(`/books/${bookId}`);
   };
 
-  const dispatch = useDispatch();
-  const books = useSelector((state) => state.books.books);
+  const dispatch = useDispatch()
+  const { books, loading, errorMessage } = useSelector(state => state.books)
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   setLoading(true);
-    //   try {
-    //     let url = `/books?_page=${pageNum}&_limit=${limit}`;
-    //     if (query) url += `&q=${query}`;
-    //     const res = await api.get(url);
-    //     setBooks(res.data);
-    //     setErrorMessage("");
-    //   } catch (error) {
-    //     setErrorMessage(error.message);
-    //   }
-    //   setLoading(false);
-    // };
-    // fetchData();
-    dispatch(getBooks({ pageNum, limit, query }));
+    dispatch(getBooks({ pageNum, limit, query }))
   }, [pageNum, limit, query]);
   //--------------form
   const defaultValues = {
@@ -71,10 +53,8 @@ const HomePage = () => {
   return (
     <Container>
       <Stack sx={{ display: "flex", alignItems: "center", m: "2rem" }}>
-        <Typography variant="h3" sx={{ textAlign: "center" }}>
-          Book Store
-        </Typography>
-        {errorMessage && <Alert severity="danger">{errorMessage}</Alert>}
+        <Typography variant="h3" sx={{ textAlign: "center" }}>Book Store</Typography>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack
             spacing={2}
