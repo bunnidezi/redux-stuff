@@ -36,6 +36,24 @@ export const addFavorite = createAsyncThunk(
   }
 );
 
+export const getFavorite = createAsyncThunk(
+  "books/getFavorite",
+  async ({ removedBookId }) => {
+    if (removedBookId) return;
+    const res = await api.get(`/favorites`);
+    return res.data;
+  }
+);
+
+export const deleteFavorite = createAsyncThunk(
+  "books/deleteFavorite",
+  async ({ removedBookId }, thunkApi) => {
+    if (!removedBookId) return;
+    await api.delete(`/favorites/${removedBookId}`);
+    toast.success("The book has been removed");
+  }
+);
+
 const bookSlice = createSlice({
   name: "books",
   initialState,
@@ -87,6 +105,37 @@ const bookSlice = createSlice({
         state.loading = false;
       })
       .addCase(addFavorite.rejected, (state, action) => {
+        state.status = "fail";
+        state.loading = false;
+        state.errorMessage = action.error.message;
+      });
+    builder
+      .addCase(getFavorite.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getFavorite.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loading = false;
+        state.books = action.payload;
+      })
+      .addCase(getFavorite.rejected, (state, action) => {
+        state.status = "fail";
+        state.loading = false;
+        state.errorMessage = action.error.message;
+      });
+    builder
+      .addCase(deleteFavorite.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+        state.errorMessage = "";
+      })
+      .addCase(deleteFavorite.fulfilled, (state) => {
+        state.status = "idle";
+        state.loading = false;
+      })
+      .addCase(deleteFavorite.rejected, (state, action) => {
         state.status = "fail";
         state.loading = false;
         state.errorMessage = action.error.message;

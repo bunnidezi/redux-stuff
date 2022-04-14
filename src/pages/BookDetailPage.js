@@ -7,31 +7,29 @@ import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, getSingleBook } from "../features/books/bookSlice";
 
-
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const BookDetailPage = () => {
   const [addingBook, setAddingBook] = useState(false);
   const params = useParams();
-  const bookId = params.id
-  const dispatch = useDispatch()
+  const bookId = params.id;
+  const dispatch = useDispatch();
 
-  const { book, loading, errorMessage } = useSelector(state => state.books)
+  const { book, loading, errorMessage } = useSelector((state) => state.books);
 
   const addToReadingList = (book) => {
     setAddingBook(book);
   };
 
-
   if (errorMessage) toast.error(errorMessage);
   useEffect(() => {
     if (addingBook) {
-      dispatch(addFavorite({ addingBook }))
+      dispatch(addFavorite({ addingBook }));
     }
   }, [addingBook]);
 
   useEffect(() => {
-    dispatch(getSingleBook({ bookId }))
+    dispatch(getSingleBook({ bookId }));
   }, [bookId]);
 
   return (
