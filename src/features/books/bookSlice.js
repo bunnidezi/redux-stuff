@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import api from '../../apiService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "../../apiService";
 
 const initialState = {
-    books: [],
-    status: "idle",
-    errorMessage: ""
-}
+  books: [],
+  status: "idle",
+  errorMessage: "",
+};
 
 // const fetchUserById = createAsyncThunk(
 //     'users/fetchByIdStatus',
@@ -16,39 +16,40 @@ const initialState = {
 // )
 
 export const getBooks = createAsyncThunk(
-    "books/getBooks",
-    async ({ pageNum, limit }, thunkApi) => {
-        let url = `/books?_page=${pageNum}&_limit=${limit}`;
-        const res = await api.get(url);
-        return res.data //[{tile:..}]
-    }
-)
+  "books/getBooks",
+  async ({ pageNum, limit, query }, thunkApi) => {
+    let url = `/books?_page=${pageNum}&_limit=${limit}`;
+    if (query) url += `&q=${query}`;
+    const res = await api.get(url);
+    return res.data; //[{tile:..}]
+  }
+);
 
 // const getFavorite = createAsyncThunk({})
 //dispatch(getBooks({pageNum:1, limit:10}))
 
-
 const bookSlice = createSlice({
-    name: "books",
-    initialState,
-    reducer: {},
-    extraReducers: (builder) => {
-        builder.addCase(getBooks.pending, (state, action) => {
-            state.status = "loading"
-        })
-            .addCase(getBooks.fulfilled, (state, action) => {
-                //action = {type:"books/getBooks/fulfilled", payload: [{tile:..}]}
-                state.status = "idle"
-                state.books = action.payload
-            })
-            .addCase(getBooks.rejected, (state, action) => {
-                state.status = "fail"
-                state.errorMessage = action.error.message
-            })
-    }
-})
+  name: "books",
+  initialState,
+  reducer: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getBooks.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(getBooks.fulfilled, (state, action) => {
+        //action = {type:"books/getBooks/fulfilled", payload: [{tile:..}]}
+        state.status = "idle";
+        state.books = action.payload;
+      })
+      .addCase(getBooks.rejected, (state, action) => {
+        state.status = "fail";
+        state.errorMessage = action.error.message;
+      });
+  },
+});
 
-export default bookSlice.reducer
+export default bookSlice.reducer;
 
 //dipatch function in component
 //aciton, reducer: update state in store
