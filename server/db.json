@@ -1,8 +1,6 @@
 {
   "favorites": [
     {
-<<<<<<< HEAD
-=======
       "author": "Chinua Achebe",
       "country": "Nigeria",
       "imageLink": "images/things-fall-apart.jpg",
@@ -25,7 +23,6 @@
       "id": "A8770585A41"
     },
     {
->>>>>>> 9e0a789f1e4a0d0ba23f1066957916efbd7fe80a
       "author": "Unknown",
       "country": "Sumer and Akkadian Empire",
       "imageLink": "images/the-epic-of-gilgamesh.jpg",
@@ -37,17 +34,6 @@
       "id": "4F45963BC33"
     },
     {
-<<<<<<< HEAD
-      "author": "Dante Alighieri",
-      "country": "Italy",
-      "imageLink": "images/the-divine-comedy.jpg",
-      "language": "Italian",
-      "link": "https://en.wikipedia.org/wiki/Divine_Comedy\n",
-      "pages": 928,
-      "title": "The Divine Comedy",
-      "year": 1315,
-      "id": "9471F309642"
-=======
       "author": "Unknown",
       "country": "Achaemenid Empire",
       "imageLink": "images/the-book-of-job.jpg",
@@ -57,7 +43,6 @@
       "title": "The Book Of Job",
       "year": -600,
       "id": "69811EF5E04"
->>>>>>> 9e0a789f1e4a0d0ba23f1066957916efbd7fe80a
     }
   ],
   "books": [
